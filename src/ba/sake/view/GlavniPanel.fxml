@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ba.sake.view.GlavniPanelController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Meni">
+            <items>
+              <MenuItem fx:id="btnOsobeEvidencije" mnemonicParsing="false" onAction="#prikaziOsobeEvidencije" text="Osobe" />
+                  <MenuItem mnemonicParsing="false" text="Zatvori" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Izvještaji">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Pomoć">
+            <items>
+              <MenuItem mnemonicParsing="false" text="O aplikaciji" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
