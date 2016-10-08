@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ba.sake.view.ListaGodinaController">
+   <center>
+      <TableView fx:id="tableGodine" editable="true">
+        <columns>
+          <TableColumn fx:id="columnGodina" prefWidth="75.0" text="Godina" />
+          <TableColumn fx:id="columnCijena" prefWidth="75.0" text="Cijena" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </center>
+   <bottom>
+      <HBox spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Spinner fx:id="spinGodina" editable="true" />
+            <Spinner fx:id="spinCijena" editable="true" />
+            <Button fx:id="btnDodaj" alignment="CENTER_RIGHT" defaultButton="true" maxWidth="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#unesiGodinu" prefWidth="50.0" text="Dodaj" HBox.hgrow="NEVER" />
+            <Button fx:id="btnObrisi" minWidth="50.0" mnemonicParsing="false" onAction="#obrisiGodinu" text="Obrisi" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
+</BorderPane>

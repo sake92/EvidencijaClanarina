@@ -11,8 +11,9 @@
         <menus>
           <Menu mnemonicParsing="false" text="Meni">
             <items>
-              <MenuItem fx:id="btnOsobeEvidencije" mnemonicParsing="false" onAction="#prikaziOsobeEvidencije" text="Osobe" />
-                  <MenuItem mnemonicParsing="false" text="Zatvori" />
+              <MenuItem fx:id="btnOsobe" mnemonicParsing="false" onAction="#prikaziOsobe" text="Osobe" />
+                  <MenuItem fx:id="btnGodine" mnemonicParsing="false" onAction="#prikaziGodine" text="Godine" />
+                  <MenuItem fx:id="btnEvidencije" mnemonicParsing="false" onAction="#prikaziEvidencije" text="Evidencije" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Izvještaji">

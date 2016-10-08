@@ -5,7 +5,9 @@ import java.io.IOException;
 import ba.sake.dao.DBUtils;
 import ba.sake.view.GlavniPanelController;
 import ba.sake.view.ListaEvidencijaController;
+import ba.sake.view.ListaGodinaController;
 import ba.sake.view.ListaOsobaController;
+import ba.sake.view.OdaberiOsobeController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -15,36 +17,52 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Main extends Application {
+	/*
+	 * TODO
+	 * 
+	 * button delete na evidencijama
+	 * 
+	 * checkiranje evidencija - update
+	 * 
+	 * izvještaji...
+	 * 
+	 * about
+	 */
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 
-	private BorderPane listaEvidencija;
 	private BorderPane listaOsoba;
+	private BorderPane listaGodina;
+	
+	private BorderPane listaEvidencija;
+	ListaEvidencijaController ctrlListaEvidencija;	// moram nekako refreshovat.... :/
+	
+	private BorderPane odaberiOsobe;		// ovo sam trebao uraditi kao modalni dijalog al de šta æeš..
+	private OdaberiOsobeController ctrlOdaberiOsobe;
 
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("AddressApp");
+		this.primaryStage.setTitle("Evidencije");
 
 		initRootLayout();
-		initListaEvidencija();
-		initListaOsoba();
+		initViews();
 
 		// prvo se prikazuje lista evidencija po godinama
 		showListaEvidencija();
-		
-		this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {			
+
+		this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
 				DBUtils.closeSessionFactory();
 			}
 		});
-		
-	}
 
+	}
+	
 	/**
-	 * Initializes the root layout.
+	 * inicijalizacija glavnog panela
 	 */
 	public void initRootLayout() {
 		try {
@@ -68,45 +86,57 @@ public class Main extends Application {
 		}
 	}
 
-	/**
-	 * Prikazuje listu evidencija za godine...
-	 */
-	private void initListaEvidencija() {
+	private void initViews() {
 		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/ListaEvidencija.fxml"));
-			listaEvidencija = (BorderPane) loader.load();
+			
+			FXMLLoader loaderListeOsoba = new FXMLLoader();
+			loaderListeOsoba.setLocation(Main.class.getResource("view/ListaOsoba.fxml"));
+			listaOsoba = (BorderPane) loaderListeOsoba.load();
+			ListaOsobaController ctrlListaOsoba = loaderListeOsoba.getController();
+			ctrlListaOsoba.setupListaOsoba(this);
+			
+			FXMLLoader loaderListeGodina = new FXMLLoader();
+			loaderListeGodina.setLocation(Main.class.getResource("view/ListaGodina.fxml"));
+			listaGodina = (BorderPane) loaderListeGodina.load();
+			ListaGodinaController ctrlListaGodina = loaderListeGodina.getController();
+			ctrlListaGodina.setupListaGodina(this);
+			
+			FXMLLoader loaderListeEvidencija = new FXMLLoader();
+			loaderListeEvidencija.setLocation(Main.class.getResource("view/ListaEvidencija.fxml"));
+			listaEvidencija = (BorderPane) loaderListeEvidencija.load();
+			ctrlListaEvidencija = loaderListeEvidencija.getController();
+			ctrlListaEvidencija.setupListaEvidencija(this);
+			
+			FXMLLoader loaderOdaberiOsobe = new FXMLLoader();
+			loaderOdaberiOsobe.setLocation(Main.class.getResource("view/OdaberiOsobe.fxml"));
+			odaberiOsobe = (BorderPane) loaderOdaberiOsobe.load();
+			ctrlOdaberiOsobe = loaderOdaberiOsobe.getController();
+			ctrlOdaberiOsobe.setupOdaberiOsobe(this, ctrlListaEvidencija);
 
-			// Give the controller access to the main app.
-			ListaEvidencijaController controller = loader.getController();
-			controller.setupListaEvidencija(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void initListaOsoba() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/ListaOsoba.fxml"));
-			listaOsoba = (BorderPane) loader.load();
-
-			ListaOsobaController controller = loader.getController();
-			controller.setupListaOsoba(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/* JAVNE METODE */
-	public void showListaEvidencija() {
-		rootLayout.setCenter(listaEvidencija);
-	}
-
 	public void showListaOsoba() {
 		rootLayout.setCenter(listaOsoba);
 	}
 
+	public void showListaGodina() {
+		rootLayout.setCenter(listaGodina);
+	}
+	
+	public void showListaEvidencija() {
+		rootLayout.setCenter(listaEvidencija);
+	}
+	
+	public OdaberiOsobeController showOdaberiOsobe() {
+		rootLayout.setCenter(odaberiOsobe);		
+		return this.ctrlOdaberiOsobe;
+	}
+
+	/* NE DIRAJ */
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
@@ -115,37 +145,3 @@ public class Main extends Application {
 		launch(args);
 	}
 }
-
-/*
- * @SuppressWarnings({ "unchecked", "rawtypes" }) public static void
- * main(String[] args) {
- * 
- * Session session = DBUtils.getSession();
- * 
- * // spremanje u bazu session.beginTransaction(); Osoba user1 = new
- * Osoba("Sake1", "Hadzija"); Osoba user2 = new Osoba("Sake2", "Pake"); Osoba
- * user3 = new Osoba("Sake3", "Nake"); session.save(user1); session.save(user2);
- * session.save(user3); session.getTransaction().commit();
- * 
- * // dobijanje podataka iz baze session = DBUtils.getSession();
- * session.beginTransaction();
- * 
- * List result = session.createQuery("from Osoba").list();
- * System.out.println("OSOBE:"); for (Osoba event : (List<Osoba>) result) {
- * System.out.println(event.getIme()); }
- * 
- * Criteria criteria = session.createCriteria(Osoba.class);
- * criteria.add(Restrictions.eq("ime", "Sake2")); result = criteria.list();
- * System.out.println("OSOBA:"); for (Osoba o : (List<Osoba>) result) {
- * System.out.println(o.getIme()); }
- * 
- * criteria = session.createCriteria(Osoba.class);
- * criteria.addOrder(Order.desc("ime")); result = criteria.list();
- * System.out.println("OSOBA:"); for (Osoba o : (List<Osoba>) result) {
- * System.out.println(o.getIme()); }
- * 
- * // konaèno zatvaranje konekcije, servera, aplikacije
- * session.getTransaction().commit(); session.close();
- * 
- * System.exit(0); }
- */

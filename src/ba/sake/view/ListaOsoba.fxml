@@ -22,10 +22,11 @@
    <bottom>
       <HBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="txtIme" promptText="Ime" />
-            <TextField fx:id="txtPrezime" promptText="Prezime" />
-            <DatePicker fx:id="pickDatumRodjenja" promptText="01.01.1990" />
+            <TextField fx:id="txtIme" promptText="Ime" HBox.hgrow="SOMETIMES" />
+            <TextField fx:id="txtPrezime" promptText="Prezime" HBox.hgrow="SOMETIMES" />
+            <DatePicker fx:id="pickDatumRodjenja" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" promptText="01.01.1990" HBox.hgrow="NEVER" />
             <Button fx:id="btnDodaj" alignment="CENTER_RIGHT" defaultButton="true" maxWidth="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#unesiOsobu" prefWidth="50.0" text="Dodaj" HBox.hgrow="NEVER" />
+            <Button fx:id="btnObrisi" minWidth="50.0" mnemonicParsing="false" onAction="#obrisiOsobu" text="Obrisi" />
          </children>
          <opaqueInsets>
             <Insets />

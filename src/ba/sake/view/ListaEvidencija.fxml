@@ -17,10 +17,11 @@
                      <children>
                         <TableView fx:id="evidencijeTable" layoutX="-39.0" layoutY="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn fx:id="imeColumn" prefWidth="75.0" text="Ime" />
-                            <TableColumn fx:id="prezimeColumn" prefWidth="75.0" text="Prezime" />
+                            <TableColumn fx:id="imeColumn" editable="false" prefWidth="75.0" text="Ime" />
+                            <TableColumn fx:id="prezimeColumn" editable="false" prefWidth="75.0" text="Prezime" />
                               <TableColumn fx:id="studentColumn" prefWidth="75.0" sortable="false" text="Student" />
                               <TableColumn fx:id="platioColumn" prefWidth="75.0" sortable="false" text="Platio" />
+                              <TableColumn fx:id="biljeskaColumn" prefWidth="75.0" sortable="false" text="Bilješka" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -61,7 +62,7 @@
                         </GridPane>
                         <ButtonBar layoutX="180.0" layoutY="337.0" prefHeight="40.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
                           <buttons>
-                            <Button mnemonicParsing="false" text="Dodaj">
+                            <Button mnemonicParsing="false" onAction="#dodajOsobeUEvidenciju" text="Dodaj">
                                  <font>
                                     <Font size="14.0" />
                                  </font></Button>

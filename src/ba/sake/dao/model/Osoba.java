@@ -2,68 +2,91 @@ package ba.sake.dao.model;
 
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javafx.beans.property.*;
 
 @Entity
 public class Osoba {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column
-	private Integer id;
-
-	@Column
-	private String ime;
-
-	@Column
-	private String prezime;
-
-	@Column
-	private LocalDate datumRodjenja;
+	@Transient
+	private final IntegerProperty id = new SimpleIntegerProperty();
+	@Transient
+	private final StringProperty ime = new SimpleStringProperty();
+	@Transient
+	private final StringProperty prezime = new SimpleStringProperty();
+	@Transient
+	private final ObjectProperty<LocalDate> datumRodjenja = new SimpleObjectProperty<>();
 
 	protected Osoba() {
+		// has to exist because of JPA reflection
 	}
 
 	public Osoba(String ime, String prezime, LocalDate datumRodjenja) {
-		this.ime = ime;
-		this.prezime = prezime;
-		this.datumRodjenja = datumRodjenja;
+		setIme(ime);
+		setPrezime(prezime);
+		setDatumRodjenja(datumRodjenja);
 	}
 
+	/* ID */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getId() {
-		return id;
+		return this.id.get();
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.id.set(id);
 	}
 
+	public IntegerProperty idProperty() {
+		return this.id;
+	}
+
+	/* IME */
+	@Column
 	public String getIme() {
-		return ime;
+		return this.ime.get();
 	}
 
 	public void setIme(String ime) {
-		this.ime = ime;
+		this.ime.set(ime);
 	}
 
+	public StringProperty imeProperty() {
+		return this.ime;
+	}
+
+	/* PREZIME */
+	@Column
 	public String getPrezime() {
-		return prezime;
+		return this.prezime.get();
 	}
 
 	public void setPrezime(String prezime) {
-		this.prezime = prezime;
+		this.prezime.set(prezime);
 	}
 
+	public StringProperty prezimeProperty() {
+		return this.prezime;
+	}
+
+	/* DATUM RODJENJA */
+	@Column
 	public LocalDate getDatumRodjenja() {
-		return datumRodjenja;
+		return this.datumRodjenja.get();
 	}
 
 	public void setDatumRodjenja(LocalDate datumRodjenja) {
-		this.datumRodjenja = datumRodjenja;
+		this.datumRodjenja.set(datumRodjenja);
 	}
 
+	public ObjectProperty<LocalDate> datumRodjenjaProperty() {
+		return this.datumRodjenja;
+	}
+
+	/* OSTALO ... */
+	@Override
+	public String toString() {
+		return getPrezime() + " " + getIme();
+	};
 }

@@ -9,7 +9,6 @@ import ba.sake.dao.model.Osoba;
 import ba.sake.utils.DateUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -29,9 +28,8 @@ import javafx.util.Callback;
 public class ListaOsobaController {
 
 	private Main main;
-	private OsobaDAO dao = OsobaDAO.getOsobaDAO();
 
-	private ObservableList<Osoba> osobe = FXCollections.observableArrayList();
+	private ObservableList<Osoba> osobe = OsobaDAO.getOsobaDAO().listOsoba();
 
 	@FXML
 	private TableView<Osoba> tableOsobe;
@@ -50,9 +48,12 @@ public class ListaOsobaController {
 	private DatePicker pickDatumRodjenja;
 	@FXML
 	private Button btnDodaj;
+	@FXML
+	private Button btnObrisi;
 
 	public void setupListaOsoba(Main main) {
 		this.main = main;
+		tableOsobe.setItems(osobe);
 	}
 
 	@FXML
@@ -60,39 +61,29 @@ public class ListaOsobaController {
 
 		// ime
 		columnIme.setEditable(true);
-		columnIme.setCellValueFactory( // vrijednost za prikazivanje, mijenjanje
-				new Callback<TableColumn.CellDataFeatures<Osoba, String>, ObservableValue<String>>() {
-					@Override
-					public ObservableValue<String> call(CellDataFeatures<Osoba, String> param) {
-						return new SimpleStringProperty(param.getValue().getIme());
-					}
-				});
+		columnIme.setCellValueFactory(cellData -> cellData.getValue().imeProperty());
 		columnIme.setCellFactory(TextFieldTableCell.<Osoba> forTableColumn());
 		columnIme.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Osoba, String>>() {
 			@Override
 			public void handle(CellEditEvent<Osoba, String> t) {
-				Osoba osoba = ((Osoba) t.getTableView().getItems().get(t.getTablePosition().getRow()));
-				osoba.setIme(t.getNewValue());
-				dao.updateOsoba(osoba);
+				Osoba o = t.getRowValue();
+				o.setIme(t.getNewValue());
+				int i = osobe.indexOf(o);
+				osobe.set(i, o);
 			}
 		});
 
 		// prezime
 		columnPrezime.setEditable(true);
-		columnPrezime.setCellValueFactory(
-				new Callback<TableColumn.CellDataFeatures<Osoba, String>, ObservableValue<String>>() {
-					@Override
-					public ObservableValue<String> call(CellDataFeatures<Osoba, String> param) {
-						return new SimpleStringProperty(param.getValue().getPrezime());
-					}
-				});
+		columnPrezime.setCellValueFactory(cellData -> cellData.getValue().prezimeProperty());
 		columnPrezime.setCellFactory(TextFieldTableCell.<Osoba> forTableColumn());
 		columnPrezime.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Osoba, String>>() {
 			@Override
 			public void handle(CellEditEvent<Osoba, String> t) {
-				Osoba osoba = ((Osoba) t.getTableView().getItems().get(t.getTablePosition().getRow()));
-				osoba.setPrezime(t.getNewValue());
-				dao.updateOsoba(osoba);
+				Osoba o = t.getRowValue();
+				o.setPrezime(t.getNewValue());
+				int i = osobe.indexOf(o);
+				osobe.set(i, o);
 			}
 		});
 
@@ -112,33 +103,40 @@ public class ListaOsobaController {
 				Osoba osoba = ((Osoba) t.getTableView().getItems().get(t.getTablePosition().getRow()));
 				String noviDatumStr = t.getNewValue();
 				try {
-					LocalDate noviDatum = LocalDate.parse(noviDatumStr);
+					LocalDate noviDatum = DateUtils.parse(noviDatumStr);
 					osoba.setDatumRodjenja(noviDatum);
-					dao.updateOsoba(osoba);
+					int i = osobe.indexOf(osoba);
+					osobe.set(i, osoba);
 				} catch (DateTimeParseException e) {
-					System.out.println("ne valja ti datum jarane");
+					System.out.println("Pogrešan format datuma!");
 				}
 			}
 		});
 
 		// tabela mora biti editabilna
 		tableOsobe.setEditable(true);
-		tableOsobe.setItems(osobe);
-		updateOsobeList();
 
-	}
-
-	private void updateOsobeList() {
-		osobe.clear();
-		osobe.addAll(dao.listOsoba());
+		// disable Delete button when no items
+		if (osobe.isEmpty())
+			btnObrisi.setDisable(true);
+		osobe.addListener((ListChangeListener.Change<? extends Osoba> change) -> {
+			if (osobe.isEmpty()) {
+				btnObrisi.setDisable(true);
+			} else {
+				btnObrisi.setDisable(false);
+			}
+		});
 	}
 
 	@FXML
 	private void unesiOsobu() {
 		if (isInputValid()) {
-			Osoba nova = new Osoba(txtIme.getText(), txtPrezime.getText(), pickDatumRodjenja.getValue());
-			dao.addOsoba(nova);
-			updateOsobeList();
+			Osoba newPerson = new Osoba(txtIme.getText(), txtPrezime.getText(), pickDatumRodjenja.getValue());
+			osobe.add(newPerson);
+			// clear inputs
+			txtIme.setText("");
+			txtPrezime.setText("");
+			pickDatumRodjenja.setValue(null);
 		}
 	}
 
@@ -162,13 +160,28 @@ public class ListaOsobaController {
 			// Show the error message.
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.initOwner(main.getPrimaryStage());
-			alert.setTitle("Invalid Fields");
-			alert.setHeaderText("Please correct invalid fields");
+			alert.setTitle("Polja nisu validna");
+			alert.setHeaderText("Molim popunite pravilno sva polja.");
 			alert.setContentText(errorMessage);
-
 			alert.showAndWait();
-
 			return false;
+		}
+	}
+
+	@FXML
+	private void obrisiOsobu() {
+		int selectedIndex = tableOsobe.getSelectionModel().getSelectedIndex();
+		if (selectedIndex >= 0) {
+			Osoba o = tableOsobe.getSelectionModel().getSelectedItem();
+			osobe.remove(o);
+		} else {
+			// Nothing selected.
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(main.getPrimaryStage());
+			alert.setTitle("Nije selektovano");
+			alert.setHeaderText("Osoba nije selektovana");
+			alert.setContentText("Molim odaberite osobu u tabeli.");
+			alert.showAndWait();
 		}
 	}
 }

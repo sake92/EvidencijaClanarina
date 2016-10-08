@@ -9,6 +9,10 @@ public class DateUtils {
 	private static final String DATE_PATTERN = "dd.MM.yyyy";
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
 	
+	/**
+	 * @param date
+	 * @return
+	 */
 	public static String format(LocalDate date) {
 		if (date == null) {
 			return null;

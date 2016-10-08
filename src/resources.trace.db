@@ -1,0 +1,23 @@
+2016-02-13 21:05:39 database: wrong user or password; user: "SA"
+org.h2.message.DbException: Wrong user name or password [28000-190]
+	at org.h2.message.DbException.get(DbException.java:179)
+	at org.h2.message.DbException.get(DbException.java:155)
+	at org.h2.message.DbException.get(DbException.java:144)
+	at org.h2.engine.Engine.openSession(Engine.java:106)
+	at org.h2.engine.Engine.openSession(Engine.java:175)
+	at org.h2.engine.Engine.createSessionAndValidate(Engine.java:153)
+	at org.h2.engine.Engine.createSession(Engine.java:136)
+	at org.h2.engine.Engine.createSession(Engine.java:28)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:349)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:107)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:91)
+	at org.h2.Driver.connect(Driver.java:72)
+	at net.sf.jasperreports.data.jdbc.JdbcDataAdapterService.getConnection(JdbcDataAdapterService.java:168)
+	at net.sf.jasperreports.data.jdbc.JdbcDataAdapterService.contributeParameters(JdbcDataAdapterService.java:128)
+	at net.sf.jasperreports.data.AbstractDataAdapterService.test(AbstractDataAdapterService.java:128)
+	at com.jaspersoft.studio.data.wizard.AbstractDataAdapterWizard$3.runOperations(AbstractDataAdapterWizard.java:162)
+	at com.jaspersoft.studio.utils.jobs.CheckedRunnableWithProgress$1.run(CheckedRunnableWithProgress.java:59)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.h2.jdbc.JdbcSQLException: Wrong user name or password [28000-190]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:345)
+	... 18 more

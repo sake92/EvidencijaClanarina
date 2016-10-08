@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-03-30T20:14:32 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaOsoba" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2eea6053-0938-475a-bff7-7b52204c3658">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="h2ClanarineBaza"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[SELECT "PUBLIC"."OSOBA"."IME",
+	"PUBLIC"."OSOBA"."PREZIME",
+	"PUBLIC"."OSOBA"."DATUMRODJENJA"
+FROM "PUBLIC"."OSOBA"
+ORDER BY "PUBLIC"."OSOBA"."PREZIME" ASC]]>
+	</queryString>
+	<field name="IME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PREZIME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATUMRODJENJA" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="47" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="8" width="595" height="30" uuid="60ca1d07-3b1b-4bf7-a3ea-8c9ed9fbf751"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lista članova]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="19" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="170" y="6" width="170" height="20" uuid="6d883add-6b0d-4e74-8c74-189cbf2e60b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ime]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-10" y="6" width="170" height="20" uuid="70f265fa-081f-4f59-a304-5db4b616abba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Prezime]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="6" width="210" height="20" uuid="f788ef29-02ef-4678-9b68-f39b77794716"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datum rođenja]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<textField>
+				<reportElement x="350" y="4" width="210" height="19" uuid="9b93f13a-a821-4d39-87ea-8d3b99d70317">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[DATEFORMAT($F{DATUMRODJENJA},"dd.MM.yyyy")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="4" width="170" height="19" uuid="e8bddd9a-27d5-4e5e-97e3-935f7f7df03c">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="-10" y="4" width="170" height="19" uuid="35556c2c-f292-4abe-b0ca-b997fcb379eb">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PREZIME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="11" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement x="180" y="0" width="100" height="30" uuid="0ecb4384-c6e6-4203-b7c0-1dc6898ecc58"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Strana " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="280" y="0" width="100" height="30" uuid="3c703d9a-ffd1-4433-9279-c2429c6732e3"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" od " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="7" splitType="Stretch"/>
+	</summary>
+</jasperReport>
